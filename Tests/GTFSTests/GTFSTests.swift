@@ -2,14 +2,8 @@ import XCTest
 @testable import GTFS
 
 final class GTFSTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(GTFS().text, "Hello, World!")
+    func testGTFSInit() throws {
+        let _ = try! GTFS(path: "/Users/emma/Projects/rail-gtfs-static")
+        
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }
