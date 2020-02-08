@@ -28,7 +28,7 @@ This package is intentionally left as a simple converter into GTFS-reference exa
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/emma-k-alexandra/GTFS.git", from: "8.0.0")
+    .package(url: "https://github.com/emma-k-alexandra/GTFS.git", from: "1.0.0")
 ]
 ```
 Add the dependency `GTFS` to your target.
@@ -40,14 +40,14 @@ Add the dependency `GTFS` to your target.
 
 #### GTFS
 ```swift
-    let gtfs = try GTFS(path: stringPath)
+let gtfs = try GTFS(path: stringPath)
 ```
 Where `stringPath` points to your GTFS folder.
 
 #### GTFS-RT
 ```swift
-    let data: Data = fetchGTFSRTData()
-    let feedMessage = TransitRealtime_FeedMessage(serializedData: data)
+let data: Data = fetchGTFSRTData()
+let feedMessage = TransitRealtime_FeedMessage(serializedData: data)
 ```
 
 ### Design
