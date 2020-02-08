@@ -49,17 +49,22 @@ extension Float {
     
 }
 
-struct Agency: Codable {
-    let agencyId: String?
-    let agencyName: String
-    let agencyUrl: String
-    let agencyTimezone: String
-    let agencyLang: String?
-    let agencyPhone: String?
-    let agencyFareUrl: String?
-    let agencyEmail: String?
+protocol FromCSVLine {
+    init(line: CSVLine)
+
+}
+
+public struct Agency: Codable, FromCSVLine {
+    public let agencyId: String?
+    public let agencyName: String
+    public let agencyUrl: String
+    public let agencyTimezone: String
+    public let agencyLang: String?
+    public let agencyPhone: String?
+    public let agencyFareUrl: String?
+    public let agencyEmail: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.agencyId = line["agency_id"]
         self.agencyName = line["agency_name"]!
         self.agencyUrl = line["agency_url"]!
@@ -73,23 +78,23 @@ struct Agency: Codable {
     
 }
 
-struct Stop: Codable {
-    let stopId: String
-    let stopCode: String?
-    let stopName: String?
-    let stopDesc: String?
-    let stopLat: Double?
-    let stopLon: Double?
-    let zoneId: String?
-    let stopUrl: String?
-    let locationType: LocationType?
-    let parentStation: String?
-    let stopTimezone: String?
-    let wheelchairBoarding: WheelchairAccessible?
-    let levelId: String?
-    let platformCode: String?
+public struct Stop: Codable, FromCSVLine {
+    public let stopId: String
+    public let stopCode: String?
+    public let stopName: String?
+    public let stopDesc: String?
+    public let stopLat: Double?
+    public let stopLon: Double?
+    public let zoneId: String?
+    public let stopUrl: String?
+    public let locationType: LocationType?
+    public let parentStation: String?
+    public let stopTimezone: String?
+    public let wheelchairBoarding: WheelchairAccessible?
+    public let levelId: String?
+    public let platformCode: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.stopId = line["stop_id"]!
         self.stopCode = line["stop_code"]
         self.stopName = line["stop_name"]
@@ -109,7 +114,7 @@ struct Stop: Codable {
     
 }
 
-enum LocationType: Int, Codable {
+public enum LocationType: Int, Codable {
     case stop = 0
     case station = 1
     case entranceOrExit = 2
@@ -135,7 +140,7 @@ enum LocationType: Int, Codable {
     
 }
 
-enum WheelchairAccessible: Int, Codable {
+public enum WheelchairAccessible: Int, Codable {
     case noInformation = 0
     case wheelchairAccessible = 1
     case notWheelchairAccessible = 2
@@ -159,19 +164,19 @@ enum WheelchairAccessible: Int, Codable {
     
 }
 
-struct Route {
-    let routeId: String
-    let agencyId: String?
-    let routeShortName: String?
-    let routeLongName: String?
-    let routeDesc: String?
-    let routeType: RouteType
-    let routeUrl: String?
-    let routeColor: String?
-    let routeTextColor: String?
-    let routeSortOrder: Int?
+public struct Route: Codable, FromCSVLine {
+    public let routeId: String
+    public let agencyId: String?
+    public let routeShortName: String?
+    public let routeLongName: String?
+    public let routeDesc: String?
+    public let routeType: RouteType
+    public let routeUrl: String?
+    public let routeColor: String?
+    public let routeTextColor: String?
+    public let routeSortOrder: Int?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.routeId = line["route_id"]!
         self.agencyId = line["agency_id"]
         self.routeShortName = line["route_short_name"]
@@ -188,7 +193,7 @@ struct Route {
 }
 
 
-enum RouteType: Int, Codable {
+public enum RouteType: Int, Codable {
     case tramStreetcaseOrLightRail = 0
     case subwayOrMetro = 1
     case rail = 2
@@ -217,19 +222,19 @@ enum RouteType: Int, Codable {
     
 }
 
-struct Trip: Codable {
-    let routeId: String
-    let serviceId: String
-    let tripId: String
-    let tripHeadsign: String?
-    let tripShortName: String?
-    let directionId: Direction?
-    let blockId: String?
-    let shapeId: String?
-    let wheelchairAccessible: WheelchairAccessible?
-    let bikesAllowed: BikesAllowed?
+public struct Trip: Codable, FromCSVLine {
+    public let routeId: String
+    public let serviceId: String
+    public let tripId: String
+    public let tripHeadsign: String?
+    public let tripShortName: String?
+    public let directionId: Direction?
+    public let blockId: String?
+    public let shapeId: String?
+    public let wheelchairAccessible: WheelchairAccessible?
+    public let bikesAllowed: BikesAllowed?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.routeId = line["route_id"]!
         self.serviceId = line["service_id"]!
         self.tripId = line["trip_id"]!
@@ -245,7 +250,7 @@ struct Trip: Codable {
     
 }
 
-enum Direction: Int, Codable {
+public enum Direction: Int, Codable {
     case travelInOneDirection = 0
     case travelInOppositeDirection = 1
     
@@ -268,7 +273,7 @@ enum Direction: Int, Codable {
     
 }
 
-enum BikesAllowed: Int, Codable {
+public enum BikesAllowed: Int, Codable {
     case noBikeInformation = 0
     case atleastOneBicycle = 1
     case noBicyclesAllowed = 2
@@ -292,19 +297,19 @@ enum BikesAllowed: Int, Codable {
     
 }
 
-struct StopTime: Codable {
-    let tripId: String
-    let arrivalTime: String?
-    let departureTime: String?
-    let stopId: String
-    let stopSequence: Int
-    let stopHeadsign: String?
-    let pickupType: PickupType?
-    let dropOffType: DropOffType?
-    let shapeDistTraveled: Float?
-    let timepoint: Timepoint?
+public struct StopTime: Codable, FromCSVLine {
+    public let tripId: String
+    public let arrivalTime: String?
+    public let departureTime: String?
+    public let stopId: String
+    public let stopSequence: Int
+    public let stopHeadsign: String?
+    public let pickupType: PickupType?
+    public let dropOffType: DropOffType?
+    public let shapeDistTraveled: Float?
+    public let timepoint: Timepoint?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.tripId = line["trip_id"]!
         self.arrivalTime = line["arrival_time"]
         self.departureTime = line["departure_time"]
@@ -315,10 +320,12 @@ struct StopTime: Codable {
         self.dropOffType = DropOffType.from(line["drop_off_type"])
         self.shapeDistTraveled = Float.from(line["shape_dist_traveled"])
         self.timepoint = Timepoint.from(line["timepoint"])
+        
     }
+    
 }
 
-enum PickupType: Int, Codable {
+public enum PickupType: Int, Codable {
     case regularlyScheduled = 0
     case noPickupAvailable = 1
     case phoneAgencyForPickup = 2
@@ -343,7 +350,7 @@ enum PickupType: Int, Codable {
     
 }
 
-enum DropOffType: Int, Codable {
+public enum DropOffType: Int, Codable {
     case regularlyScheduled = 0
     case noDropOffAvailable = 1
     case phoneAgencyForDropOff = 2
@@ -368,7 +375,7 @@ enum DropOffType: Int, Codable {
     
 }
 
-enum Timepoint: Int, Codable {
+public enum Timepoint: Int, Codable {
     case approximate = 0
     case exact = 1
     
@@ -390,19 +397,19 @@ enum Timepoint: Int, Codable {
         
 }
 
-struct GTFSCalendar: Codable {
-    let serviceId: String
-    let monday: ServiceAvailable
-    let tuesday: ServiceAvailable
-    let wednesday: ServiceAvailable
-    let thursday: ServiceAvailable
-    let friday: ServiceAvailable
-    let saturday: ServiceAvailable
-    let sunday: ServiceAvailable
-    let startDate: String
-    let endDate: String
+public struct GTFSCalendar: Codable, FromCSVLine {
+    public let serviceId: String
+    public let monday: ServiceAvailable
+    public let tuesday: ServiceAvailable
+    public let wednesday: ServiceAvailable
+    public let thursday: ServiceAvailable
+    public let friday: ServiceAvailable
+    public let saturday: ServiceAvailable
+    public let sunday: ServiceAvailable
+    public let startDate: String
+    public let endDate: String
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.serviceId = line["service_id"]!
         self.monday = ServiceAvailable.from(line["monday"]!)
         self.tuesday = ServiceAvailable.from(line["tuesday"]!)
@@ -418,7 +425,7 @@ struct GTFSCalendar: Codable {
     
 }
 
-enum ServiceAvailable: Int, Codable {
+public enum ServiceAvailable: Int, Codable {
     case notAvailableForAll = 0
     case availableForAll = 1
     
@@ -435,12 +442,12 @@ enum ServiceAvailable: Int, Codable {
     
 }
 
-struct CalendarDate: Codable {
-    let serviceId: String
-    let date: String
-    let exceptionType: ExceptionType
+public struct CalendarDate: Codable, FromCSVLine {
+    public let serviceId: String
+    public let date: String
+    public let exceptionType: ExceptionType
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.serviceId = line["service_id"]!
         self.date = line["date"]!
         self.exceptionType = ExceptionType.from(line["exception_type"]!)
@@ -449,7 +456,7 @@ struct CalendarDate: Codable {
     
 }
 
-enum ExceptionType: Int, Codable {
+public enum ExceptionType: Int, Codable {
     case serviceAdded = 1
     case serviceRemoved = 2
     
@@ -466,16 +473,16 @@ enum ExceptionType: Int, Codable {
     
 }
 
-struct FareAttribute: Codable {
-    let fareId: String
-    let price: Float
-    let currencyType: String
-    let paymentMethod: PaymentMethod
-    let transfers: TransfersAllowed
-    let agencyId: String?
-    let transferDuration: Int?
+public struct FareAttribute: Codable, FromCSVLine {
+    public let fareId: String
+    public let price: Float
+    public let currencyType: String
+    public let paymentMethod: PaymentMethod
+    public let transfers: TransfersAllowed
+    public let agencyId: String?
+    public let transferDuration: Int?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.fareId = line["fare_id"]!
         self.price = Float.from(line["price"]!)!
         self.currencyType = line["currency_type"]!
@@ -488,7 +495,7 @@ struct FareAttribute: Codable {
     
 }
 
-enum PaymentMethod: Int, Codable {
+public enum PaymentMethod: Int, Codable {
     case farePaidOnBoard = 0
     case fareMustBePaidBeforeBoarding = 1
     
@@ -505,7 +512,7 @@ enum PaymentMethod: Int, Codable {
     
 }
 
-enum TransfersAllowed: Int, Codable {
+public enum TransfersAllowed: Int, Codable {
     case noTransfers = 0
     case oneTransfer = 1
     case twoTransfers = 2
@@ -524,14 +531,14 @@ enum TransfersAllowed: Int, Codable {
     
 }
 
-struct FareRule: Codable {
-    let fareId: String
-    let routeId: String?
-    let originId: String?
-    let destinationId: String?
-    let containsId: String?
+public struct FareRule: Codable, FromCSVLine {
+    public let fareId: String
+    public let routeId: String?
+    public let originId: String?
+    public let destinationId: String?
+    public let containsId: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.fareId = line["fare_id"]!
         self.routeId = line["route_id"]
         self.originId = line["origin_id"]
@@ -542,14 +549,14 @@ struct FareRule: Codable {
     
 }
 
-struct Shape: Codable {
-    let shapeId: String?
-    let shapePtLat: Double
-    let shapePtLon: Double
-    let shapePtSequence: Int
-    let shapeDistTraveled: Float?
+public struct Shape: Codable, FromCSVLine {
+    public let shapeId: String?
+    public let shapePtLat: Double
+    public let shapePtLon: Double
+    public let shapePtSequence: Int
+    public let shapeDistTraveled: Float?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.shapeId = line["shape_id"]
         self.shapePtLat = Double.from(line["shape_pt_lat"])!
         self.shapePtLon = Double.from(line["shape_pt_lon"])!
@@ -560,14 +567,14 @@ struct Shape: Codable {
     
 }
 
-struct Frequency: Codable {
-    let tripId: String
-    let startTime: String
-    let endTime: String
-    let headwaySecs: Int
-    let exactTimes: ExactTimes?
+public struct Frequency: Codable, FromCSVLine {
+    public let tripId: String
+    public let startTime: String
+    public let endTime: String
+    public let headwaySecs: Int
+    public let exactTimes: ExactTimes?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.tripId = line["trip_id"]!
         self.startTime = line["start_time"]!
         self.endTime = line["end_time"]!
@@ -578,7 +585,7 @@ struct Frequency: Codable {
     
 }
 
-enum ExactTimes: Int, Codable {
+public enum ExactTimes: Int, Codable {
     case frequencyBasedTrips = 0
     case scheduleBasedTrips = 1
     
@@ -601,13 +608,13 @@ enum ExactTimes: Int, Codable {
     
 }
 
-struct Transfer: Codable {
-    let fromStopId: String
-    let topStopId: String
-    let transferType: TransferType
-    let minTransferTime: Int?
+public struct Transfer: Codable, FromCSVLine {
+    public let fromStopId: String
+    public let topStopId: String
+    public let transferType: TransferType
+    public let minTransferTime: Int?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.fromStopId = line["from_stop_id"]!
         self.topStopId = line["top_stop_id"]!
         self.transferType = TransferType.from(line["transfer_type"]!)
@@ -617,7 +624,7 @@ struct Transfer: Codable {
     
 }
 
-enum TransferType: Int, Codable {
+public enum TransferType: Int, Codable {
     case recommendedTransferPoint = 0
     case timeTransferPoint = 1
     case minimumTimeTransfer = 2
@@ -636,21 +643,21 @@ enum TransferType: Int, Codable {
     
 }
 
-struct Pathway: Codable {
-    let pathwayId: String
-    let fromStopId: String
-    let toStopId: String
-    let pathwayMode: PathwayMode
-    let isBidirectional: Bidirectional
-    let length: Float?
-    let transversalTime: Int?
-    let stairCount: Int?
-    let maxSlope: Float?
-    let minWidth: Float?
-    let signpostedAs: String?
-    let reversedSignpostedAs: String?
+public struct Pathway: Codable, FromCSVLine {
+    public let pathwayId: String
+    public let fromStopId: String
+    public let toStopId: String
+    public let pathwayMode: PathwayMode
+    public let isBidirectional: Bidirectional
+    public let length: Float?
+    public let transversalTime: Int?
+    public let stairCount: Int?
+    public let maxSlope: Float?
+    public let minWidth: Float?
+    public let signpostedAs: String?
+    public let reversedSignpostedAs: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.pathwayId = line["pathway_id"]!
         self.fromStopId = line["from_stop_id"]!
         self.toStopId = line["to_stop_id"]!
@@ -668,7 +675,7 @@ struct Pathway: Codable {
     
 }
 
-enum Bidirectional: Int, Codable {
+public enum Bidirectional: Int, Codable {
     case unidirectional = 0
     case bidirectional = 1
     
@@ -685,7 +692,7 @@ enum Bidirectional: Int, Codable {
     
 }
 
-enum PathwayMode: Int, Codable {
+public enum PathwayMode: Int, Codable {
     case walkway = 1
     case stairs = 2
     case movingSidewalkOrTravelator = 3
@@ -706,12 +713,12 @@ enum PathwayMode: Int, Codable {
     
 }
 
-struct Level: Codable {
-    let levelId: String
-    let levelIndex: Float
-    let levelName: String?
+public struct Level: Codable, FromCSVLine {
+    public let levelId: String
+    public let levelIndex: Float
+    public let levelName: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.levelId = line["level_id"]!
         self.levelIndex = Float.from(line["level_index"])!
         self.levelName = line["level_name"]
@@ -720,17 +727,17 @@ struct Level: Codable {
     
 }
 
-struct FeedInfo: Codable {
-    let feedPublisherName: String
-    let feedPublisherUrl: String
-    let feedLang: String
-    let feedStartDate: String?
-    let feedEndDate: String?
-    let feedVersion: String?
-    let feedContactEmail: String?
-    let feedContactUrl: String?
+public struct FeedInfo: Codable, FromCSVLine {
+    public let feedPublisherName: String
+    public let feedPublisherUrl: String
+    public let feedLang: String
+    public let feedStartDate: String?
+    public let feedEndDate: String?
+    public let feedVersion: String?
+    public let feedContactEmail: String?
+    public let feedContactUrl: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.feedPublisherName = line["feed_publisher_name"]!
         self.feedPublisherUrl = line["feed_publisher_url"]!
         self.feedLang = line["feed_lang"]!
@@ -744,14 +751,14 @@ struct FeedInfo: Codable {
     
 }
 
-struct Translation: Codable {
-    let tableName: TableName
-    let fieldName: String
-    let language: String
-    let translation: String
-    let recordId: String?
+public struct Translation: Codable, FromCSVLine {
+    public let tableName: TableName
+    public let fieldName: String
+    public let language: String
+    public let translation: String
+    public let recordId: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.tableName = TableName.from(line["table_name"]!)
         self.fieldName = line["field_name"]!
         self.language = line["language"]!
@@ -762,7 +769,7 @@ struct Translation: Codable {
     
 }
 
-enum TableName: String, Codable {
+public enum TableName: String, Codable {
     case agency = "agency"
     case stops = "stops"
     case routes = "routes"
@@ -777,20 +784,20 @@ enum TableName: String, Codable {
     
 }
 
-struct Attribution: Codable {
-    let attributionId: String?
-    let agencyId: String?
-    let routeId: String?
-    let tripId: String?
-    let organizationName: String
-    let isProducer: HasRole?
-    let isOperator: HasRole?
-    let isAuthority: HasRole?
-    let attributionUrl: String?
-    let attributionEmail: String?
-    let attributionPhone: String?
+public struct Attribution: Codable, FromCSVLine {
+    public let attributionId: String?
+    public let agencyId: String?
+    public let routeId: String?
+    public let tripId: String?
+    public let organizationName: String
+    public let isProducer: HasRole?
+    public let isOperator: HasRole?
+    public let isAuthority: HasRole?
+    public let attributionUrl: String?
+    public let attributionEmail: String?
+    public let attributionPhone: String?
     
-    init(line: CSVLine) {
+    public init(line: CSVLine) {
         self.attributionId = line["attribution_id"]
         self.agencyId = line["agency_id"]
         self.routeId = line["route_id"]
@@ -802,11 +809,12 @@ struct Attribution: Codable {
         self.attributionUrl = line["attribution_url"]
         self.attributionEmail = line["attribution_email"]
         self.attributionPhone = line["attribution_phone"]
+        
     }
     
 }
 
-enum HasRole: Int, Codable {
+public enum HasRole: Int, Codable {
     case organizationDoesNotHaveRole = 0
     case organizationDoesHaveRole = 1
     

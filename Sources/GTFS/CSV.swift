@@ -21,23 +21,29 @@ class StreamReader  {
         do {
             let fileHandle = try FileHandle(forReadingFrom: path)
             self.fileHandle = fileHandle
+            
         } catch {
             return nil
+            
         }
         
         
         guard let delimData = delimiter.data(using: encoding) else {
             return nil
+            
         }
+        
         self.encoding = encoding
         self.chunkSize = chunkSize
         self.delimData = delimData
         self.buffer = Data(capacity: chunkSize)
         self.atEof = false
+        
     }
     
     deinit {
         self.close()
+        
     }
     
     /// Return next line, or nil on EOF.
@@ -52,10 +58,12 @@ class StreamReader  {
                 // Remove line (and the delimiter) from the buffer:
                 buffer.removeSubrange(0..<range.upperBound)
                 return line
+                
             }
             let tmpData = fileHandle.readData(ofLength: chunkSize)
             if tmpData.count > 0 {
                 buffer.append(tmpData)
+                
             } else {
                 // EOF or read error.
                 atEof = true
@@ -64,10 +72,14 @@ class StreamReader  {
                     let line = String(data: buffer as Data, encoding: encoding)
                     buffer.count = 0
                     return line
+                    
                 }
+                
             }
+            
         }
         return nil
+        
     }
     
     /// Start reading from the beginning of file.
@@ -75,12 +87,14 @@ class StreamReader  {
         fileHandle.seek(toFileOffset: 0)
         buffer.count = 0
         atEof = false
+        
     }
     
     /// Close the underlying file. No reading must be done after calling this method.
     func close() -> Void {
         fileHandle?.closeFile()
         fileHandle = nil
+        
     }
 }
 
@@ -88,20 +102,23 @@ extension StreamReader : Sequence {
     func makeIterator() -> AnyIterator<String> {
         return AnyIterator {
             return self.nextLine()
+            
         }
+        
     }
+    
 }
 
-struct CSVLine {
-    let keys: [String]
-    let values: [String]
+public struct CSVLine {
+    public let keys: [String]
+    public let values: [String]
     
-    var dict: [String: String] {
+    public var dict: [String: String] {
         return Dictionary(uniqueKeysWithValues: zip(self.keys, self.values))
         
     }
     
-    subscript(key: String) -> String? {
+    public subscript(key: String) -> String? {
         guard let index = self.keys.firstIndex(of: key) else {
             return nil
             
@@ -114,9 +131,10 @@ struct CSVLine {
     
 }
 
-enum CSVError: Error {
+public enum CSVError: Error {
     case unableToCreateReader
     case emptyFile
+
 }
 
 class CSVReader {
@@ -148,27 +166,20 @@ class CSVReader {
 }
 
 extension CSVReader: IteratorProtocol {
+    typealias Element = CSVLine
+    
     func next() -> CSVLine? {
         guard let line = self.reader.nextLine() else {
             return nil
             
         }
         
-        let values = line.splitAndClean()
-        
-        if self.header.count != values.count {
-            print(values, line)
-            
-        }
-        
         return CSVLine(
             keys: self.header,
-            values: values
+            values: line.splitAndClean()
         )
         
     }
-    
-    typealias Element = CSVLine
     
 }
 
