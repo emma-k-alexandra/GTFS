@@ -20,7 +20,7 @@ This package is intentionally left as a simple converter into GTFS-reference exa
 - [License](#license)
 
 ## Requirements
-- Swift 5.1? Untested on lower versions of Swift.
+- Swift 5.4
 
 ## Installation
 
@@ -28,7 +28,11 @@ This package is intentionally left as a simple converter into GTFS-reference exa
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/emma-k-alexandra/GTFS.git", from: "1.0.0")
+    .package(
+        name: "GTFS",
+        url: "https://github.com/emma-k-alexandra/GTFS.git",
+        .upToNextMajor(from: .init(1, 0, 1))
+    )
 ]
 ```
 Add the dependency `GTFS` to your target.

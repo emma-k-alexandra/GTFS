@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.4
 import PackageDescription
 
 let package = Package(
@@ -6,11 +6,16 @@ let package = Package(
     products: [
         .library(
             name: "GTFS",
-            targets: ["GTFS"]),
+            targets: ["GTFS"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.8.0"),
+        .package(
+            name: "SwiftProtobuf",
+            url: "https://github.com/apple/swift-protobuf.git",
+            .upToNextMajor(from: .init(1, 18, 0))
+        )
     ],
     targets: [
         .target(

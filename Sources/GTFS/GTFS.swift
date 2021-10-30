@@ -42,9 +42,7 @@ public class GTFS {
         self.feedInformation = initializeOptionalFile(url.appendingPathComponent("feed_info.txt"))
         self.translations = initializeOptionalFile(url.appendingPathComponent("translations.txt"))
         self.attributions = initializeOptionalFile(url.appendingPathComponent("attributions.txt"))
-        
     }
-    
 }
 
 func initializeFile<T: FromCSVLine>(_ path: URL) throws -> [T] {
@@ -52,9 +50,7 @@ func initializeFile<T: FromCSVLine>(_ path: URL) throws -> [T] {
     
     return reader.map { line -> T in
         T(line: line)
-        
     }
-    
 }
 
 func initializeOptionalFile<T: FromCSVLine>(_ path: URL) -> [T]? {
@@ -63,9 +59,6 @@ func initializeOptionalFile<T: FromCSVLine>(_ path: URL) -> [T]? {
     return reader.map { reader -> [T] in
         reader.map { line -> T in
             T(line: line)
-            
         }
-        
     }
-    
 }
